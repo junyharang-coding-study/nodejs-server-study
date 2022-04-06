@@ -5,6 +5,7 @@ const path = require("path");
 
 const main = require("./main.js");
 const email = require("./email.js");
+const join = require("./join.js");
 
 
 router.get("/", function(request, response) {  // url Routing
@@ -21,5 +22,6 @@ router.get("/", function(request, response) {  // url Routing
 router.use("/main", main);                             // /main으로 요청이 들어오면 routes/main.js으로 보낸다.
 router.use("/", main);                                 // /로 요청이 들어오면 routes/main.js으로 보낸다.
 router.use("/email", email);
+router.use("/join", join);
 
 module.exports = router;
