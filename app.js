@@ -36,3 +36,12 @@ app.post("/email_post", function(request, response) {
     response.render('email.ejs', {'email' : request.body.email});
 
 });
+
+app.post("/ajax_send_email", function(request, response) {
+    let responseData = {"result" : "ok", "email" : request.body.email}
+
+    console.log(request.body.email);
+
+    // 응답 주기
+    response.json(responseData);
+});
