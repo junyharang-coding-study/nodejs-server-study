@@ -37,11 +37,12 @@
             xhr.setRequestHeader("Content-Type", "application/json");
             xhr.send(dataStore);
             xhr.addEventListener("load", function() {
-                let reulst = JSON.parse(xhr.responseText);
+                let result = JSON.parse(xhr.responseText);
+                let resultDiv = document.querySelector(".result");
 
-                if(reulst.reulst !== "ok") return;
-                
-                document.querySelector(".result").innerHTML = reulst.email;
+                if(result.result !== "ok") resultDiv.innerHTML = "Email에 해당하는 회원을 찾지 못했습니다!";
+
+                else resultDiv.innerHTML = result.name;
             });
         }   // sendAjax(url, data) 끝
     </script>

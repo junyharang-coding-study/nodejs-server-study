@@ -1,11 +1,24 @@
 const express = require("express");
 const app = express();
 const bodyPaser = require("body-parser");
+const mysql = require("mysql");                     // mysql Import (설치법 : $ npm install mysql --save)
+const Connection = require("mysql/lib/Connection");
 
 const port = 8080;
 
-app.use(express.static('public'));   // public이라는 Directory를 static(정적)으로 기억하라고 명령
-app.use(bodyPaser.json());                  // express Server에 나! Body Paser쓸거야! 라고 알려주는 명령이면서 Json으로 Client의 Data를 받겠다는 의미
+// mysql 연동
+const connection = mysql.createConnection({
+    host : "211.37.173.118",
+    port : 3306,
+    user : "chnops1",
+    password : "chnops1234",
+    database : "iomt_portal"
+});
+
+connection.connect();
+
+app.use(express.static('public'));                  // public이라는 Directory를 static(정적)으로 기억하라고 명령
+app.use(bodyPaser.json());                          // express Server에 나! Body Paser쓸거야! 라고 알려주는 명령이면서 Json으로 Client의 Data를 받겠다는 의미
 app.use(bodyPaser.urlencoded({extended:true}));     // client에 오는 요청이 json 형태가 아닐 때 urlencoding으로 Data를 받겠다는 의미
 app.set("view engine", "ejs");                      // express에게 view engine은 ejs를 쓰겠다고 명령! 설치법 : npm install ejs --save
 
@@ -38,10 +51,31 @@ app.post("/email_post", function(request, response) {
 });
 
 app.post("/ajax_send_email", function(request, response) {
-    let responseData = {"result" : "ok", "email" : request.body.email}
 
-    console.log(request.body.email);
+    let email = request.body.email;
 
-    // 응답 주기
-    response.json(responseData);
+    let responseData = {};
+
+    let query = connection.query('select nickname from user where userEmail="' + email + '"', function(error, rows) {
+        if(error) throw error;
+
+        if(rows[0]) {
+
+            console.log(rows[0].nickname);
+
+            responseData.result = "ok";
+            responseData.name = rows[0].nickname;
+
+        } else {
+
+            responseData.result = "none";
+            responseData.name = null;
+
+            console.log(`해당 Email로 조회된 정보가 없습니다${rows[0]}`);
+
+        }
+
+        response.json(responseData);
+    })
+    // input 값에 대한 유효성 검사 하기 => select DB
 });
