@@ -8,7 +8,7 @@ const email = require("./email.js");
 const join = require("./join.js");
 
 
-router.get("/", function(request, response) {  // url Routing
+router.get("/main", function(request, response) {  // url Routing
 
     console.log("/routes/index.js가 호출 되었습니다!")
     console.log("/가 요청 되었습니다!")
