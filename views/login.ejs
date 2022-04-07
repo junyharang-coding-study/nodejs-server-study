@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>email form</title>
+</head>
+<body>
+    
+    <form action="/email/form" method="post">
+
+    email : <input type="email" name="email"><br/>
+
+    password : <input type="password" name="password"><br/>
+
+    </form>
+
+    <button class="sendbtn">login</button>
+
+    <div class="result"></div>
+
+    <script>
+        document.querySelector('.sendbtn').addEventListener('click', function() {
+
+            let email = document.getElementsByName('email')[0].value;
+
+            let password = document.getElementsByName('password')[0].value;
+
+            sendAjax('http://localhost:8080/login', {'email' : email, 'password' : password});
+
+        })
+
+        function sendAjax(url, data) {
+            // let dataStore = {"email" : data};
+            // JSON 형태의 문자열 형식으로 만들어 주는 부분
+            data = JSON.stringify(data);
+
+            let xhr = new XMLHttpRequest();
+            xhr.open("POST", url);
+            // 요청 헤더에 JSON 형태로 Data를 보내겠다는 의미
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.send(data);
+
+            xhr.addEventListener("load", function() {
+
+                let result = JSON.parse(xhr.responseText);
+                let resultDiv = document.querySelector(".result");
+
+                if(result.email) {
+                    // 로그인을 성공하면 Main Page로 이동
+                    window.location.href="/main";
+                    // resultDiv.innerHTML = "Welcome" + result.email + "!!";
+                } else if (xhr.status === 401) {
+                    resultDiv.innerHTML = result;
+                } else {
+                    resultDiv.innerHTML = result;
+                }
+            });
+        }   // sendAjax(url, data) 끝
+    </script>
+</body>
+</html>

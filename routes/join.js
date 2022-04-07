@@ -48,7 +48,7 @@ passport.deserializeUser(function(id, done) {
 
     done(null, id);
 
-})
+});
 
 // passport를 이용한 회원 가입
 passport.use("local-join", new LocalStrategy ({
@@ -119,5 +119,6 @@ router.post("/", function(request, response) {
     }); 
 })
 */
+
 
 module.exports = router;
